@@ -3,4 +3,7 @@
     <string name="password_hint">Enter Password</string>
     <string name="username_hint">Enter Username</string>
     <string name="login">Login</string>
+
+    <string name="classList">Your Classes:</string>
+
 </resources>

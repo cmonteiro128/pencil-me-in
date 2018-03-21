@@ -10,14 +10,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".TaskView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".calendarView"></activity>
+        <activity android:name=".LoginScreen" android:noHistory="true" android:excludeFromRecents="true">
+        </activity>
+        <activity android:name=".CalendarView"></activity>
     </application>
 
 </manifest>

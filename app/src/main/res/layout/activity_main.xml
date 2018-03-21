@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mobileapp.wit.edu.pencilmein.MainActivity">
+    tools:context="mobileapp.wit.edu.pencilmein.LoginScreen">
 
     <Button
         android:id="@+id/buttonLogin"

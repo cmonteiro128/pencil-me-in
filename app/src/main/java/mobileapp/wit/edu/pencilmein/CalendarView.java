@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.alamkanak.weekview.WeekView;
 
-public class calendarView extends AppCompatActivity {
+public class CalendarView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
