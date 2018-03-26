@@ -32,7 +32,7 @@ public class TaskView extends AppCompatActivity {
         }
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.classListView);
-        for (StorageHandler.ClassListData i : classes) {
+        for (StorageHandler.ClassListData i : classes){
             TextView className = new TextView(this);
             className.setText(i.className);
             ll.addView(className);

@@ -23,6 +23,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class LoginScreen extends AppCompatActivity {
 
     TextView TxtResult;
@@ -42,9 +44,13 @@ public class LoginScreen extends AppCompatActivity {
         final EditText usernameEditText = (EditText) findViewById(R.id.editTextUsername);
         final EditText passwordEditText = (EditText) findViewById(R.id.editTextPassword);
 
+        //Initialize Paper
+        Paper.init(getApplicationContext());
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
 
         button.setOnClickListener(new View.OnClickListener() {
 

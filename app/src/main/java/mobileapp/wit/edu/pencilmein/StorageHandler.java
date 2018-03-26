@@ -20,7 +20,7 @@ public class StorageHandler {
     StorageHandler() {
     }
 
-    StorageHandler(String recieveJson) {
+    StorageHandler(String recieveJson){
         this.recieveJson = recieveJson;
     }
 

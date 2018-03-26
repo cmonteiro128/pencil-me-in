@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuCalender"
+        android:icon="@drawable/ic_calender"
+        app:showAsAction="ifRoom"
+        android:title="Calender">
+    </item>
+
+    <item
+        android:id="@+id/menuAdd"
+        android:icon="@drawable/ic_add_box"
+        app:showAsAction="ifRoom|withText"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/menuOption"
+        android:icon="@drawable/ic_option_menu"
+        app:showAsAction="ifRoom|withText"
+        android:title="Profile"/>
+</menu>
