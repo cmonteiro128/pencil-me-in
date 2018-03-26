@@ -1,5 +1,6 @@
 package mobileapp.wit.edu.pencilmein;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -25,9 +28,10 @@ import io.paperdb.Paper;
  */
 
 public class AddTask extends AppCompatActivity{
-    private EditText des, alm;
+    private EditText des, alm, dueDate;
     private Spinner classSpinner;
     private Button done;
+    private DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class AddTask extends AppCompatActivity{
 
         addItemToSpinner();
         addListenerInButton();
+        addListenerInDate();
 
     }
 
@@ -57,7 +62,6 @@ public class AddTask extends AppCompatActivity{
         classSpinner = (Spinner)findViewById(R.id.classListSpinner);
 
         des = (EditText)findViewById(R.id.addTaskDescription);
-        alm = (EditText)findViewById(R.id.addTaskAlarm);
         done = (Button)findViewById(R.id.addTaskButton);
 
         done.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +119,36 @@ public class AddTask extends AppCompatActivity{
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, class_list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         classSpinner.setAdapter(dataAdapter);
+    }
 
+    /*
+     * Date Picker
+     */
+    public void addListenerInDate(){
+        dueDate = (EditText) findViewById(R.id.selectDueDate);
+        dueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //calender class's instance and get current date , month and year from calender
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(AddTask.this,
+                        new DatePickerDialog.OnDateSetListener() {
 
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                dueDate.setText(dayOfMonth + "/"
+                                        + (monthOfYear + 1) + "/" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
     }
 }

@@ -17,10 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
         <activity android:name=".LoginScreen" android:noHistory="true" android:excludeFromRecents="true">
         </activity>
-        -->
         <activity android:name=".DailyView"></activity>
 
     </application>

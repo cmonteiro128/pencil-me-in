@@ -8,7 +8,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:background="?attr/colorPrimary"
@@ -16,7 +16,6 @@
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@android:color/white"></android.support.v7.widget.Toolbar>
@@ -24,7 +23,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="0dp"
-        android:layout_height="510dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,22 +38,19 @@
             android:id="@+id/addTaskButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="DONE"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addTaskAlarm"
-            app:layout_constraintVertical_bias="1.0" />
+            tools:layout_editor_absoluteY="410dp" />
 
         <TextView
             android:id="@+id/selectClassText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Select Class"
+            android:layout_marginTop="8dp"
+            android:text="@string/classList"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,8 +58,13 @@
         <Spinner
             android:id="@+id/classListSpinner"
             android:layout_width="363dp"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="16dp"
+            android:background="#d4d4d4"
+            android:textColor="#1f201f"
+
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/selectClassText" />
 
@@ -76,19 +77,24 @@
             android:text="Task Description"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/classListSpinner" />
+            app:layout_constraintTop_toBottomOf="@+id/selectDueDate" />
 
         <EditText
             android:id="@+id/addTaskDescription"
-            android:layout_width="354dp"
-            android:layout_height="155dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
+            android:layout_width="361dp"
+            android:layout_height="88dp"
+            android:layout_marginLeft="16dp"
+            android:background="#d4d4d4"
+            android:gravity="top|left"
+            android:hint="Enter Description..."
             android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:lines="4"
+            android:padding="10dp"
+            android:textColor="#1f201f"
+            android:textColorHint="#81c7be"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
@@ -97,23 +103,108 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:text="Alarm Time"
+            android:text="Time"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addTaskDescription" />
 
-        <EditText
-            android:id="@+id/addTaskAlarm"
-            android:layout_width="232dp"
+        <TextView
+            android:id="@+id/selectDateText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
+            android:text="Due Dates"
+            android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/classListSpinner" />
+
+        <EditText
+            android:id="@+id/selectDueDate"
+            android:layout_width="361dp"
+            android:layout_height="42dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:background="#d4d4d4"
+            android:hint="Select Date..."
+            android:padding="10dp"
+            android:textColor="#1f201f"
+            android:textColorHint="#81c7be"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectDateText" />
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="357dp"
+            android:layout_height="91dp"
+            android:layout_marginLeft="16dp"
+            android:background="#d4d4d4"
+            android:gravity="left"
+            android:padding="5dip"
+            android:textSize="20sp"
+            android:timePickerMode="spinner"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textAlarm" />
+
+        <TextView
+            android:id="@+id/setAlarmText"
+            android:layout_width="54dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Set Alarm"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+        <NumberPicker
+            android:id="@+id/alarmHourPicker"
+            android:layout_width="54dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#d4d4d4"
+            android:hint="1"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textColor="#1f201f"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/hrBefore"
+            app:layout_constraintStart_toEndOf="@+id/setAlarmText"
+            app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+        <TextView
+            android:id="@+id/hrBefore"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="#d4d4d4"
+            android:text="Hr Before"
+            android:textColor="#1f201f"
+            android:textSize="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+        <Switch
+            android:id="@+id/alarmSwitch"
+            android:layout_width="74dp"
+            android:layout_height="41dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/hrBefore"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hrBefore"
+            app:layout_constraintTop_toBottomOf="@+id/timePicker"
+            app:layout_constraintVertical_bias="0.0" />
+
 
     </android.support.constraint.ConstraintLayout>
 
