@@ -18,14 +18,19 @@ public class TaskHandler {
         this.date = date;
     }
 
+    /*
+     * @param: Date
+     * Save new task to the database
+     */
     public void saveTask(Task t){
-        List<Task> tasks = new ArrayList<Task>();
         if(Paper.book().contains(this.date)){
-            tasks = Paper.book().read(this.date);
+            List<Task> tasks = Paper.book().read(this.date);
+
             tasks.add(t);
             Paper.book().write(this.date, tasks);
         }
         else{
+            List<Task> tasks = new ArrayList<Task>();
             tasks.add(t);
             Paper.book().write(this.date, tasks);
         }
@@ -38,13 +43,8 @@ public class TaskHandler {
      * @return: all task on provide date
      */
     public List<Task> retriveTask(String date){
-        List<Task> tasks = new ArrayList<Task>();
-        if(Paper.book().contains(date)){
             return Paper.book().read(date);
-        }
-        else{
-            return tasks;
-        }
+
     }
 
 

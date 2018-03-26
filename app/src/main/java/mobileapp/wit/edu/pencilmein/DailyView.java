@@ -25,11 +25,12 @@ public class DailyView extends AppCompatActivity{
         Paper.init(getApplicationContext());
 
         List<Task> classes = Paper.book().read("1993-16-17");
+        Paper.book().delete("1993-16-17");
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.classListView);
         for (Task i : classes){
             TextView className = new TextView(this);
-            className.setText(i.description);
+            className.setText(i.className);
             ll.addView(className);
         }
 

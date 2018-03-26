@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,10 @@ import io.paperdb.Paper;
  */
 
 public class AddTask extends AppCompatActivity{
+    private EditText des, alm;
+    private Spinner classSpinner;
+    private Button done;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +37,65 @@ public class AddTask extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button done = (Button)findViewById(R.id.addTaskButton);
         //Initialize Paper
         Paper.init(getApplicationContext());
+
+        addItemToSpinner();
+        addListenerInButton();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public void addListenerInButton(){
+        //Class List Spinner
+        classSpinner = (Spinner)findViewById(R.id.classListSpinner);
+
+        des = (EditText)findViewById(R.id.addTaskDescription);
+        alm = (EditText)findViewById(R.id.addTaskAlarm);
+        done = (Button)findViewById(R.id.addTaskButton);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+
+                String description = des.getText().toString();
+                String alarm = alm.getText().toString();
+                String item = classSpinner.getSelectedItem().toString();
+
+
+                Log.e("Button Done Clicked", "xxxxxxxxxxxxxxxxxxxxx");
+                Task t = new Task(description, item, alarm);
+                TaskHandler d = new TaskHandler("1993-16-17");
+                d.saveTask(t);
+
+                Toast.makeText(AddTask.this,
+                        "OnClickListener : " +
+                                "\nSpinner : "+ String.valueOf(t.description),
+                        Toast.LENGTH_SHORT).show();
+
+                Log.d("This is the task des", t.description);
+
+                Intent intent = new Intent(v.getContext(), DailyView.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+    }
+
+    /*
+     * Add Item to spinner
+     */
+    public void addItemToSpinner(){
+        //Class List Spinner
+        Spinner classSpinner = (Spinner)findViewById(R.id.classListSpinner);
 
         //Getting Classes
         StorageHandler storage = new StorageHandler();
@@ -50,52 +111,11 @@ public class AddTask extends AppCompatActivity{
             class_list.add(i.className);
         }
 
-        //Class List Spinner
-        Spinner classSpinner = (Spinner)findViewById(R.id.classListSpinner);
-
-        // Creating adapter for spinner
+        // Creating adapter for spinner - Drop down layout style - list view with radio button - set adapter
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, class_list);
-
-        // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
         classSpinner.setAdapter(dataAdapter);
-        final String item = classSpinner.getSelectedItem().toString();
 
 
-        //Get Description
-        EditText des = (EditText)findViewById(R.id.addTaskDescription);
-        final String description = des.getText().toString();
-
-        //Get Alarm Time
-        EditText alm = (EditText)findViewById(R.id.addTaskAlarm);
-        final String alarm = alm.getText().toString();
-
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Log.e("Button Done Clicked", "xxxxxxxxxxxxxxxxxxxxx");
-                Task t = new Task(description, item, alarm);
-                TaskHandler d = new TaskHandler("1993-16-17");
-                d.saveTask(t);
-
-                Log.d("This is the task des", t.description);
-
-                Intent intent = new Intent(v.getContext(), DailyView.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 }
