@@ -15,5 +15,4 @@ public class Task {
         this.description = des;
         this.time = time;
     }
-
 }
