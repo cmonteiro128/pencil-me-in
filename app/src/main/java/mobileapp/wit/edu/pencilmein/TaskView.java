@@ -26,16 +26,20 @@ public class TaskView extends AppCompatActivity {
         StorageHandler storage = new StorageHandler();
         List<StorageHandler.ClassListData> classes= storage.retrieveClassListObject();
         if(classes == null) {
-            Intent intent = new Intent(this, LoginScreen.class);
+            Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
             startActivity(intent);
             finish();
         }
-
-        LinearLayout ll = (LinearLayout) findViewById(R.id.classListView);
-        for (StorageHandler.ClassListData i : classes){
-            TextView className = new TextView(this);
-            className.setText(i.className);
-            ll.addView(className);
+        else {
+            for(StorageHandler.ClassListData i: classes){
+                System.out.println(i.className);
+            }
+            LinearLayout ll = (LinearLayout) findViewById(R.id.classListView);
+            for (StorageHandler.ClassListData i : classes) {
+                TextView className = new TextView(this);
+                className.setText(i.className);
+                ll.addView(className);
+            }
         }
     }
 }
