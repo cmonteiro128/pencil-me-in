@@ -1,7 +1,6 @@
 package mobileapp.wit.edu.pencilmein;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,4 +50,8 @@ public class TaskHandler {
     /*
      * @param:
      */
+    public List<Task> retriveTask(){
+        return Paper.book().read(date);
+    }
+
 }

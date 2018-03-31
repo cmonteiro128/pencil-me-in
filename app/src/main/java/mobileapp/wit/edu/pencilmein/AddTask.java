@@ -1,6 +1,7 @@
 package mobileapp.wit.edu.pencilmein;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,25 +30,33 @@ import io.paperdb.Paper;
  */
 
 public class AddTask extends AppCompatActivity{
-    private EditText des, alm, dueDate;
+    private EditText des;
+    private TextView dueTime, dueDate;
     private Spinner classSpinner;
+    private NumberPicker notificationSpinner;
     private Button done;
     private DatePickerDialog datePickerDialog;
+    private TimePickerDialog timePickerDialog;
+    private int mYear,mMonth, mDay, hour, min;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_addtask);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.addtaskToolbar);
         setSupportActionBar(toolbar);
 
         //Initialize Paper
         Paper.init(getApplicationContext());
 
         addItemToSpinner();
-        addListenerInButton();
         addListenerInDate();
+        addItemToNotificationSpinner();
+        openTimePickerDialog();
+
+
+
 
     }
 
@@ -60,22 +70,27 @@ public class AddTask extends AppCompatActivity{
     public void addListenerInButton(){
         //Class List Spinner
         classSpinner = (Spinner)findViewById(R.id.classListSpinner);
-
         des = (EditText)findViewById(R.id.addTaskDescription);
         done = (Button)findViewById(R.id.addTaskButton);
+        notificationSpinner = (NumberPicker)findViewById(R.id.alarmHourPicker);
+        dueDate = (TextView) findViewById(R.id.selectDueDate);
+        dueTime = (TextView) findViewById(R.id.dueTime);
+
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
 
+                String className = classSpinner.getSelectedItem().toString();
                 String description = des.getText().toString();
-                String alarm = alm.getText().toString();
-                String item = classSpinner.getSelectedItem().toString();
-
+                int notificaionTime = notificationSpinner.getValue();
+                String date = dueDate.getText().toString();
+                String time = dueTime.getText().toString();
 
                 Log.e("Button Done Clicked", "xxxxxxxxxxxxxxxxxxxxx");
-                Task t = new Task(description, item, alarm);
-                TaskHandler d = new TaskHandler("1993-16-17");
+
+                Task t = new Task(className, description, time, notificaionTime);
+                TaskHandler d = new TaskHandler(date);
                 d.saveTask(t);
 
                 Toast.makeText(AddTask.this,
@@ -85,7 +100,7 @@ public class AddTask extends AppCompatActivity{
 
                 Log.d("This is the task des", t.description);
 
-                Intent intent = new Intent(v.getContext(), DailyView.class);
+                Intent intent = new Intent(v.getContext(), TaskView.class);
                 startActivity(intent);
                 finish();
             }
@@ -99,7 +114,7 @@ public class AddTask extends AppCompatActivity{
      */
     public void addItemToSpinner(){
         //Class List Spinner
-        Spinner classSpinner = (Spinner)findViewById(R.id.classListSpinner);
+        classSpinner = (Spinner)findViewById(R.id.classListSpinner);
 
         //Getting Classes
         StorageHandler storage = new StorageHandler();
@@ -125,15 +140,20 @@ public class AddTask extends AppCompatActivity{
      * Date Picker
      */
     public void addListenerInDate(){
-        dueDate = (EditText) findViewById(R.id.selectDueDate);
+        dueDate = (TextView) findViewById(R.id.selectDueDate);
+        //calender class's instance and get current date , month and year from calender
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR); // current year
+        mMonth = c.get(Calendar.MONTH); // current month
+        mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+
+        dueDate.setText(mDay + "/"
+                + (mMonth + 1) + "/" + mYear);
+
         dueDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //calender class's instance and get current date , month and year from calender
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); // current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+
                 // date picker dialog
                 datePickerDialog = new DatePickerDialog(AddTask.this,
                         new DatePickerDialog.OnDateSetListener() {
@@ -142,8 +162,8 @@ public class AddTask extends AppCompatActivity{
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                dueDate.setText(dayOfMonth + "/"
-                                        + (monthOfYear + 1) + "/" + year);
+                                dueDate.setText((monthOfYear + 1) + "/"
+                                        + dayOfMonth + "/" + year);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -151,4 +171,74 @@ public class AddTask extends AppCompatActivity{
             }
         });
     }
+
+    //function to show timepicker dialog
+    private void openTimePickerDialog()
+    {
+        dueTime = (TextView)findViewById(R.id.dueTime);
+        final Calendar c = Calendar.getInstance();
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        min = c.get(Calendar.MINUTE);
+        dueTime.setText(updateTime(hour,min));
+        dueTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                timePickerDialog = new TimePickerDialog(AddTask.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int min) {
+                        //set selected time to textview
+                        dueTime.setText(updateTime(hour,min));
+                    }
+                },hour,min,false);
+                timePickerDialog.show();
+            }
+        });
+
+
+
+    }
+
+    public void addItemToNotificationSpinner(){
+        //Class List Spinner
+        notificationSpinner = (NumberPicker) findViewById(R.id.alarmHourPicker);
+
+        notificationSpinner.setMinValue(0);
+        notificationSpinner.setMaxValue(24);
+        notificationSpinner.setValue(1);
+        notificationSpinner.setWrapSelectorWheel(true);
+
+        notificationSpinner.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                notificationSpinner.setValue(newVal);
+            }
+        });
+    }
+
+
+    // function to get am and pm from time
+    private String updateTime(int hours, int mins) {
+        String timeSet = "";
+        if (hours > 12) {
+            hours -= 12;
+            timeSet = "PM";
+        } else if (hours == 0) {
+            hours += 12;
+            timeSet = "AM";
+        } else if (hours == 12)
+            timeSet = "PM";
+        else
+            timeSet = "AM";
+        String minutes = "";
+        if (mins < 10)
+            minutes = "0" + mins;
+        else
+            minutes = String.valueOf(mins);
+        // Append in a StringBuilder
+        String aTime = new StringBuilder().append(hours).append(':')
+                .append(minutes).append(" ").append(timeSet).toString();
+        return aTime;
+    }
+
 }
