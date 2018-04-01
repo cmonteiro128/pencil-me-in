@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,7 +50,7 @@ public class TaskView extends AppCompatActivity {
         }
         else {
             Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
             String formattedDate = df.format(c);
 
 
@@ -56,6 +58,9 @@ public class TaskView extends AppCompatActivity {
 
             dateSelected = (TextView)findViewById(R.id.date_main);
             dateSelected.setText(formattedDate);
+            getAllTask(formattedDate);
+
+
 
 
             /*
@@ -95,12 +100,23 @@ public class TaskView extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void getSchedule(String date){
+    /*
+     *
+     */
+    public void getAllTask(String date){
+        Log.d("Inside getALlTask", "done");
         taskHandler = new TaskHandler(date);
         List<Task> listOfTask = taskHandler.retriveTask();
 
-        adapter = new TaskItemAdapter(this, 0, listOfTask);
-        ListView listView = (ListView)findViewById(R.id.listView_taskview);
+        if(listOfTask == null){
+            Log.d("Cannot inflate", "failed");
+        }
+        else {
+            Log.d("Inflate task in view", "done");
+            adapter = new TaskItemAdapter(this, 0, listOfTask);
+            ListView listView = (ListView) findViewById(R.id.listView_taskview);
+            listView.setAdapter(adapter);
+        }
     }
 
 

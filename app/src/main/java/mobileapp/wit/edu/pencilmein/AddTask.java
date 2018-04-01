@@ -54,6 +54,7 @@ public class AddTask extends AppCompatActivity{
         addListenerInDate();
         addItemToNotificationSpinner();
         openTimePickerDialog();
+        addListenerInButton();
 
 
 
@@ -86,6 +87,12 @@ public class AddTask extends AppCompatActivity{
                 int notificaionTime = notificationSpinner.getValue();
                 String date = dueDate.getText().toString();
                 String time = dueTime.getText().toString();
+
+                Log.e("cName in Task view", className);
+                Log.e("des in Task view", description);
+                Log.e("date in Task view", date);
+                Log.e("time in Task view", time);
+
 
                 Log.e("Button Done Clicked", "xxxxxxxxxxxxxxxxxxxxx");
 
@@ -147,8 +154,8 @@ public class AddTask extends AppCompatActivity{
         mMonth = c.get(Calendar.MONTH); // current month
         mDay = c.get(Calendar.DAY_OF_MONTH); // current day
 
-        dueDate.setText(mDay + "/"
-                + (mMonth + 1) + "/" + mYear);
+        dueDate.setText((mMonth + 1) + "/"
+                + mDay + "/" + mYear);
 
         dueDate.setOnClickListener(new View.OnClickListener() {
             @Override
