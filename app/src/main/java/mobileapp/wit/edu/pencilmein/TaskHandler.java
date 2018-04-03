@@ -13,34 +13,30 @@ import io.paperdb.Paper;
  */
 
 public class TaskHandler {
-    private String date;
-
-    TaskHandler(String date){
-        this.date = date.replace('/', 'd');
-    }
 
     /*
      * @param: Date
      * Save new task to the database
      */
     public void saveTask(Task t){
+        List<String> allKeys = Paper.book().getAllKeys();
 
-        if(Paper.book().contains(this.date)) {
-            List<Task> taskArrayList = Paper.book().read(this.date);
+        Log.e("keys in Task handler:", allKeys.toString());
+        if(Paper.book().contains(t.getDueDateForStorage())) {
+            List<Task> taskArrayList = Paper.book().read(t.getDueDateForStorage());
             taskArrayList.add(t);
-            Paper.book().write(this.date, taskArrayList);
-
-
+            Paper.book().write(t.getDueDateForStorage(), taskArrayList);
         }
         else {
             List<Task> taskArrayList = new ArrayList<Task>();
             taskArrayList.add(t);
-            Paper.book().write(this.date, taskArrayList);
+            Paper.book().write(t.getDueDateForStorage(), taskArrayList);
         }
 
         Log.d("Task Handler", "Task Succesfully saved");
 
-        List<String> allKeys = Paper.book().getAllKeys();
+
+        allKeys = Paper.book().getAllKeys();
 
         //List<Task> list = Paper.book().read(this.date);
         Log.e("keys in Task handler:", allKeys.toString());
@@ -51,27 +47,13 @@ public class TaskHandler {
      * @param: date
      * @return: all task on provide date
      */
-    public List<Task> retriveTask(String d){
-        String date = d.replace('/', 'd');
+    public List<Task> retrieveTasksForDate(String date){
+        String d = date.replace('/', 'd');
         if(Paper.book().contains(date)) {
-            List<Task> taskList = Paper.book().read(date);
-            return taskList;
+            return Paper.book().read(d);
         }
         else{
             return null;
         }
-
     }
-
-
-    /*
-     * @param:
-     */
-    public List<Task> retriveTask(){
-            Log.e("date retrive task", this.date);
-            Log.d("Retrive Tasl", "done");
-            List<Task> taskList = Paper.book().read(this.date);
-            return taskList;
-    }
-
 }

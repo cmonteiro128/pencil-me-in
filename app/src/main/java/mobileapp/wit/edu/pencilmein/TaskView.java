@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,7 +47,7 @@ public class TaskView extends AppCompatActivity {
         }
         else {
             Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
+            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
             String formattedDate = df.format(c);
 
 
@@ -93,7 +90,7 @@ public class TaskView extends AppCompatActivity {
             return true;
         }
         if(id == R.id.menuCalender){
-            Intent intent = new Intent(this, CalendarView.class);
+            Intent intent = new Intent(this, MyCalendarView.class);
             this.startActivity(intent);
             return true;
         }
@@ -105,8 +102,8 @@ public class TaskView extends AppCompatActivity {
      */
     public void getAllTask(String date){
         Log.d("Inside getALlTask", "done");
-        taskHandler = new TaskHandler(date);
-        List<Task> listOfTask = taskHandler.retriveTask();
+        taskHandler = new TaskHandler();
+        List<Task> listOfTask = taskHandler.retrieveTasksForDate(date);
 
         if(listOfTask == null){
             Log.d("Cannot inflate", "failed");

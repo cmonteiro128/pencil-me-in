@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginScreen" android:noHistory="true" android:excludeFromRecents="true"/>
-        <activity android:name=".CalendarView"/>
+        <activity android:name=".MyCalendarView"/>
         <activity android:name=".AddTask"/>
 
     </application>

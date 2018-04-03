@@ -19,8 +19,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -96,8 +98,8 @@ public class AddTask extends AppCompatActivity{
 
                 Log.e("Button Done Clicked", "xxxxxxxxxxxxxxxxxxxxx");
 
-                Task t = new Task(className, description, time, notificaionTime);
-                TaskHandler d = new TaskHandler(date);
+                Task t = new Task(className, description, date, time, notificaionTime);
+                TaskHandler d = new TaskHandler();
                 d.saveTask(t);
 
                 Toast.makeText(AddTask.this,
@@ -150,12 +152,12 @@ public class AddTask extends AppCompatActivity{
         dueDate = (TextView) findViewById(R.id.selectDueDate);
         //calender class's instance and get current date , month and year from calender
         final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR); // current year
-        mMonth = c.get(Calendar.MONTH); // current month
-        mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-
-        dueDate.setText((mMonth + 1) + "/"
-                + mDay + "/" + mYear);
+        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        final String formattedDate = sdf.format(c.getTime());
+        mMonth = Integer.valueOf(formattedDate.substring(0, 2));
+        mDay = Integer.valueOf(formattedDate.substring(3,5));
+        mYear = Integer.valueOf(formattedDate.substring(6));
+        dueDate.setText(formattedDate);
 
         dueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,12 +170,11 @@ public class AddTask extends AppCompatActivity{
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                // set day of month , month and year value in the edit text
-                                dueDate.setText((monthOfYear + 1) + "/"
-                                        + dayOfMonth + "/" + year);
+                                String formatDate = sdf.format(new Date(year, monthOfYear, dayOfMonth));
+                                dueDate.setText(formatDate);
 
                             }
-                        }, mYear, mMonth, mDay);
+                        }, mYear, mMonth-1, mDay);
                 datePickerDialog.show();
             }
         });
