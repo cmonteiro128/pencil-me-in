@@ -2,6 +2,7 @@ package mobileapp.wit.edu.pencilmein;
 
 import android.util.Log;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class TaskHandler {
     private String date;
 
     TaskHandler(String date){
-        this.date = date;
+        this.date = date.replace('/', 'd');
     }
 
     /*
@@ -23,18 +24,26 @@ public class TaskHandler {
      * Save new task to the database
      */
     public void saveTask(Task t){
-        if(Paper.book().contains(this.date)){
-            List<Task> tasks = Paper.book().read(this.date);
 
-            tasks.add(t);
-            Paper.book().write(this.date, tasks);
+        if(Paper.book().contains(this.date)) {
+            List<Task> taskArrayList = Paper.book().read(this.date);
+            taskArrayList.add(t);
+            Paper.book().write(this.date, taskArrayList);
+
+
         }
-        else{
-            List<Task> tasks = new ArrayList<Task>();
-            tasks.add(t);
-            Paper.book().write(this.date, tasks);
+        else {
+            List<Task> taskArrayList = new ArrayList<Task>();
+            taskArrayList.add(t);
+            Paper.book().write(this.date, taskArrayList);
         }
+
         Log.d("Task Handler", "Task Succesfully saved");
+
+        List<String> allKeys = Paper.book().getAllKeys();
+
+        //List<Task> list = Paper.book().read(this.date);
+        Log.e("keys in Task handler:", allKeys.toString());
 
     }
 
@@ -42,8 +51,15 @@ public class TaskHandler {
      * @param: date
      * @return: all task on provide date
      */
-    public List<Task> retriveTask(String date){
-            return Paper.book().read(date);
+    public List<Task> retriveTask(String d){
+        String date = d.replace('/', 'd');
+        if(Paper.book().contains(date)) {
+            List<Task> taskList = Paper.book().read(date);
+            return taskList;
+        }
+        else{
+            return null;
+        }
 
     }
 
@@ -51,4 +67,11 @@ public class TaskHandler {
     /*
      * @param:
      */
+    public List<Task> retriveTask(){
+            Log.e("date retrive task", this.date);
+            Log.d("Retrive Tasl", "done");
+            List<Task> taskList = Paper.book().read(this.date);
+            return taskList;
+    }
+
 }

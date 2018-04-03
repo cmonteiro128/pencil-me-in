@@ -8,11 +8,14 @@ package mobileapp.wit.edu.pencilmein;
 public class Task {
     String description;
     String className;
-    String time;
+    String dueTime;
+    int notificationTime;
 
-    Task(String des, String cName, String time){
+
+    Task(String cName, String des, String dueTime, int notification){
         this.className = cName;
         this.description = des;
-        this.time = time;
+        this.dueTime = dueTime;
+        this.notificationTime = notification;
     }
 }

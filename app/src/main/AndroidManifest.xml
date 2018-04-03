@@ -20,7 +20,6 @@
         <activity android:name=".LoginScreen" android:noHistory="true" android:excludeFromRecents="true"/>
         <activity android:name=".CalendarView"/>
         <activity android:name=".AddTask"/>
-        <activity android:name=".DailyView"/>
 
     </application>
 

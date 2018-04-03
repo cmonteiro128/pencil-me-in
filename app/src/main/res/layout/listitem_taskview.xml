@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Time and description
+   List Item in List view of activity_main
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/displaytime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/class_name"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/task_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- Check Box to close the view -->
+    <CheckBox
+        android:id="@+id/mark_completion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-31dip"
+        android:layout_marginTop="-10dip"
+        android:gravity="center"
+        android:text="" />
+
+</LinearLayout>
