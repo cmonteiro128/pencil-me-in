@@ -26,7 +26,8 @@
             android:id="@+id/class_name"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:textSize="24sp"
+            android:paddingRight="15dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:paddingLeft="10dp"/>
 
@@ -34,8 +35,8 @@
             android:id="@+id/task_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -45,7 +46,7 @@
         android:id="@+id/mark_completion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-31dip"
+        android:layout_marginLeft="-25dip"
         android:layout_marginTop="-10dip"
         android:gravity="center"
         android:text="" />
