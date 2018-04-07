@@ -20,7 +20,7 @@
         <activity android:name=".LoginScreen" android:noHistory="true" android:excludeFromRecents="true"></activity>
         <activity android:name=".CalendarView"></activity>
         <activity android:name=".AddTask"></activity>
-
+        <receiver android:name=".NotificationPublisher" />
     </application>
 
 </manifest>
