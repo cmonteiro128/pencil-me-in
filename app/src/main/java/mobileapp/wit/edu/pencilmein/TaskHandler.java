@@ -2,7 +2,6 @@ package mobileapp.wit.edu.pencilmein;
 
 import android.util.Log;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +45,15 @@ public class TaskHandler {
      */
     public List<Task> retrieveTasksForDate(String date){
         String d = date.replace('/', 'd');
-        if(Paper.book().contains(date)) {
+        if(Paper.book().contains(d)) {
             return Paper.book().read(d);
         }
         else{
             return null;
         }
+    }
+
+    public List<String> getAllTaskDates(){
+        return  Paper.book().getAllKeys();
     }
 }

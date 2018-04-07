@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -40,12 +41,22 @@ public class AddTask extends AppCompatActivity{
     private Button done;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
+    private Calendar calendar;
+    private Date currentDate;
     private int hour, min;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_addtask);
+        calendar = new GregorianCalendar();
+
+        Bundle b = getIntent().getExtras();
+        if(b != null){
+            currentDate = (Date)b.get("Date");
+            calendar.setTime(currentDate);
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.addtaskToolbar);
         setSupportActionBar(toolbar);
@@ -111,6 +122,7 @@ public class AddTask extends AppCompatActivity{
                 Log.d("This is the task des", t.description);
 
                 Intent intent = new Intent(v.getContext(), TaskView.class);
+                intent.putExtra("Date", currentDate);
                 startActivity(intent);
                 finish();
             }
@@ -152,9 +164,8 @@ public class AddTask extends AppCompatActivity{
     public void addListenerInDate(){
         dueDate = (TextView) findViewById(R.id.selectDueDate);
         //calender class's instance and get current date , month and year from calender
-        final Calendar c = Calendar.getInstance();
         final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        final String formattedDate = sdf.format(c.getTime());
+        final String formattedDate = sdf.format(calendar.getTime());
         dueDate.setText(formattedDate);
 
         dueDate.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +178,11 @@ public class AddTask extends AppCompatActivity{
 
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                Calendar newDate = Calendar.getInstance();
-                                newDate.set(year, monthOfYear, dayOfMonth);
-                                dueDate.setText(sdf.format(newDate.getTime()));
+                                calendar.set(year, monthOfYear, dayOfMonth);
+                                dueDate.setText(sdf.format(calendar.getTime()));
 
                             }
-                        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
             }
         });
@@ -182,9 +192,10 @@ public class AddTask extends AppCompatActivity{
     private void openTimePickerDialog()
     {
         dueTime = (TextView)findViewById(R.id.dueTime);
-        final Calendar c = Calendar.getInstance();
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        min = c.get(Calendar.MINUTE);
+        calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        min = calendar.get(Calendar.MINUTE);
         dueTime.setText(updateTime(hour,min));
         dueTime.setOnClickListener(new View.OnClickListener() {
             @Override

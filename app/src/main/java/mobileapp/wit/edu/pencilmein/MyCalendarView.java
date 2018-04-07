@@ -1,12 +1,18 @@
 package mobileapp.wit.edu.pencilmein;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.CalendarView;
 
-import java.text.SimpleDateFormat;
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MyCalendarView extends AppCompatActivity {
@@ -16,23 +22,47 @@ public class MyCalendarView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar_view);
 
-        CalendarView myCalendarView = (CalendarView) findViewById(R.id.calendarView);
+        CalendarView calendarView = (CalendarView) findViewById(R.id.calendarView);
 
-        Calendar date = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        String currentDate = sdf.format(date.getTime());
-
-
-
-        TaskHandler taskHandler = new TaskHandler();
-        Log.v("asjkdhjakshdkjahskjdhk", currentDate);
-        List<Task> tasks = taskHandler.retrieveTasksForDate(currentDate);
-
-        if(tasks != null)
-        for(Task t: tasks){
-           t.printTask();
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendarView.setDate(calendar);
         }
-        else
-            Log.v("ERRRORORRROROROROr", "Null");
+        catch (Exception e){
+            Log.v("Date Out of Range", e.getMessage());
+        }
+
+        List<EventDay> events = new ArrayList<>();
+        TaskHandler t = new TaskHandler();
+        List<String> taskDates = t.getAllTaskDates();
+        for(String s: taskDates){
+            if(s.length() == 10){
+                Calendar cal = new GregorianCalendar();
+                int month = Integer.valueOf(s.substring(0, 2)) - 1;
+                int day = Integer.valueOf(s.substring(3, 5));
+                int year = Integer.valueOf(s.substring(6));
+                cal.set(year, month, day);
+                EventDay e = new EventDay(cal, R.drawable.ic_event);
+                events.add(e);
+            }
+        }
+        calendarView.setEvents(events);
+
+        calendarView.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onDayClick(EventDay eventDay) {
+                switchToTaskView(eventDay.getCalendar().getTime());
+            }
+        });
+        calendarView.getCurrentPageDate();
+
+
+    }
+
+    private void switchToTaskView(Date date){
+        Intent intent = new Intent(this, TaskView.class);
+        intent.putExtra("Date", date);
+        startActivity(intent);
+
     }
 }
