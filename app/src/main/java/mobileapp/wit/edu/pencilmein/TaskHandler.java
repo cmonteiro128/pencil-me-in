@@ -19,9 +19,6 @@ public class TaskHandler {
      * Save new task to the database
      */
     public void saveTask(Task t){
-        List<String> allKeys = Paper.book().getAllKeys();
-
-        Log.e("keys in Task handler:", allKeys.toString());
         if(Paper.book().contains(t.getDueDateForStorage())) {
             List<Task> taskArrayList = Paper.book().read(t.getDueDateForStorage());
             taskArrayList.add(t);
@@ -36,10 +33,10 @@ public class TaskHandler {
         Log.d("Task Handler", "Task Succesfully saved");
 
 
-        allKeys = Paper.book().getAllKeys();
+        List<String> allKeys = Paper.book().getAllKeys();
 
         //List<Task> list = Paper.book().read(this.date);
-        Log.e("keys in Task handler:", allKeys.toString());
+        Log.e("Keys in Task handler:", allKeys.toString());
 
     }
 

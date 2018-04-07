@@ -40,7 +40,7 @@ public class AddTask extends AppCompatActivity{
     private Button done;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
-    private int mYear,mMonth, mDay, hour, min;
+    private int hour, min;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,9 +155,6 @@ public class AddTask extends AppCompatActivity{
         final Calendar c = Calendar.getInstance();
         final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         final String formattedDate = sdf.format(c.getTime());
-        mMonth = Integer.valueOf(formattedDate.substring(0, 2));
-        mDay = Integer.valueOf(formattedDate.substring(3,5));
-        mYear = Integer.valueOf(formattedDate.substring(6));
         dueDate.setText(formattedDate);
 
         dueDate.setOnClickListener(new View.OnClickListener() {
@@ -169,13 +166,13 @@ public class AddTask extends AppCompatActivity{
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                String formatDate = sdf.format(new Date(year, monthOfYear, dayOfMonth));
-                                dueDate.setText(formatDate);
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, monthOfYear, dayOfMonth);
+                                dueDate.setText(sdf.format(newDate.getTime()));
 
                             }
-                        }, mYear, mMonth-1, mDay);
+                        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
             }
         });

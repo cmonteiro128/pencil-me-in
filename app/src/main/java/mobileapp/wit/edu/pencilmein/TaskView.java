@@ -40,7 +40,7 @@ public class TaskView extends AppCompatActivity {
     private TaskHandler taskHandler;
     private Button prevButton, nextButton;
     private Date c;
-    private SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
+    private SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
     private String formattedDate, todayDate;
     private LayoutInflater layoutInflater;
     private ConstraintLayout constraintLayout;

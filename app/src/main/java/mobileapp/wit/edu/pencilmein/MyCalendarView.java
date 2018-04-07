@@ -19,8 +19,10 @@ public class MyCalendarView extends AppCompatActivity {
         CalendarView myCalendarView = (CalendarView) findViewById(R.id.calendarView);
 
         Calendar date = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         String currentDate = sdf.format(date.getTime());
+
+
 
         TaskHandler taskHandler = new TaskHandler();
         Log.v("asjkdhjakshdkjahskjdhk", currentDate);
