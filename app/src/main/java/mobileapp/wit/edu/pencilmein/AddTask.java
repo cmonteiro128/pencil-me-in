@@ -24,8 +24,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -43,12 +46,22 @@ public class AddTask extends AppCompatActivity{
     private Button done;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
-    private int mYear,mMonth, mDay, hour, min;
+    private Calendar calendar;
+    private Date currentDate;
+    private int hour, min;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_addtask);
+        calendar = new GregorianCalendar();
+
+        Bundle b = getIntent().getExtras();
+        if(b != null){
+            currentDate = (Date)b.get("Date");
+            calendar.setTime(currentDate);
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.addtaskToolbar);
         setSupportActionBar(toolbar);
@@ -102,8 +115,8 @@ public class AddTask extends AppCompatActivity{
 
                 Log.e("Button Done Clicked", "xxxxxxxxxxxxxxxxxxxxx");
 
-                Task t = new Task(className, description, time, notificaionTime);
-                TaskHandler d = new TaskHandler(date);
+                Task t = new Task(className, description, date, time, notificaionTime);
+                TaskHandler d = new TaskHandler();
                 d.saveTask(t);
 
                 Toast.makeText(AddTask.this,
@@ -117,6 +130,7 @@ public class AddTask extends AppCompatActivity{
                 scheduleNotification(getNotification(t.description), 3000);
 
                 Intent intent = new Intent(v.getContext(), TaskView.class);
+                intent.putExtra("Date", currentDate);
                 startActivity(intent);
                 finish();
             }
@@ -179,13 +193,9 @@ public class AddTask extends AppCompatActivity{
     public void addListenerInDate(){
         dueDate = (TextView) findViewById(R.id.selectDueDate);
         //calender class's instance and get current date , month and year from calender
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR); // current year
-        mMonth = c.get(Calendar.MONTH); // current month
-        mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-
-        dueDate.setText((mMonth + 1) + "/"
-                + mDay + "/" + mYear);
+        final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        final String formattedDate = sdf.format(calendar.getTime());
+        dueDate.setText(formattedDate);
 
         dueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,14 +206,12 @@ public class AddTask extends AppCompatActivity{
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                // set day of month , month and year value in the edit text
-                                dueDate.setText((monthOfYear + 1) + "/"
-                                        + dayOfMonth + "/" + year);
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                calendar.set(year, monthOfYear, dayOfMonth);
+                                dueDate.setText(sdf.format(calendar.getTime()));
 
                             }
-                        }, mYear, mMonth, mDay);
+                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
             }
         });
@@ -213,9 +221,10 @@ public class AddTask extends AppCompatActivity{
     private void openTimePickerDialog()
     {
         dueTime = (TextView)findViewById(R.id.dueTime);
-        final Calendar c = Calendar.getInstance();
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        min = c.get(Calendar.MINUTE);
+        calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        min = calendar.get(Calendar.MINUTE);
         dueTime.setText(updateTime(hour,min));
         dueTime.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,5 @@
 package mobileapp.wit.edu.pencilmein;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -10,19 +9,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -39,7 +36,7 @@ public class TaskView extends AppCompatActivity {
     private TaskHandler taskHandler;
     private Button prevButton, nextButton;
     private Date c;
-    private SimpleDateFormat df = new SimpleDateFormat("M/d/yyyy");
+    private SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
     private String formattedDate, todayDate;
     private LayoutInflater layoutInflater;
     private ConstraintLayout constraintLayout;
@@ -53,6 +50,47 @@ public class TaskView extends AppCompatActivity {
 
         //Initialize Paper
         Paper.init(getApplicationContext());
+
+
+        storage = new StorageHandler();
+        List<StorageHandler.ClassListData> classes= storage.retrieveClassListObject();
+        if(classes == null) {
+            Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            c = Calendar.getInstance().getTime();
+            Bundle b = this.getIntent().getExtras();
+            if(b != null) {
+                c = (Date) b.get("Date");
+            }
+            Log.v("TASK DATE", c.toString());
+            SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+            formattedDate = df.format(c);
+
+
+            Log.e("date in Task view", formattedDate);
+
+            dateSelected = (TextView)findViewById(R.id.date_main);
+            dateSelected.setText(formattedDate);
+            getAllTask(formattedDate);
+
+
+
+
+            /*
+            for(StorageHandler.ClassListData i: classes){
+                System.out.println(i.className);
+            }
+            LinearLayout ll = (LinearLayout) findViewById(R.id.classListView);
+            for (StorageHandler.ClassListData i : classes) {
+                TextView className = new TextView(this);
+                className.setText(i.className);
+                ll.addView(className);
+            }
+            */
+        }
         listTask();
     }
     @Override
@@ -68,11 +106,12 @@ public class TaskView extends AppCompatActivity {
 
         if(id == R.id.menuAdd){
             Intent intent = new Intent(this, AddTask.class);
+            intent.putExtra("Date", c);
             this.startActivity(intent);
             return true;
         }
         if(id == R.id.menuCalender){
-            Intent intent = new Intent(this, CalendarView.class);
+            Intent intent = new Intent(this, MyCalendarView.class);
             this.startActivity(intent);
             return true;
         }
@@ -84,8 +123,8 @@ public class TaskView extends AppCompatActivity {
      */
     public void getAllTask(String date){
         Log.d("Inside getALlTask", "done");
-        taskHandler = new TaskHandler(date);
-        List<Task> listOfTask = taskHandler.retriveTask();
+        taskHandler = new TaskHandler();
+        List<Task> listOfTask = taskHandler.retrieveTasksForDate(date);
 
         if(listOfTask == null){
             layoutInflater = (LayoutInflater)this.getSystemService(this.LAYOUT_INFLATER_SERVICE);
@@ -105,10 +144,10 @@ public class TaskView extends AppCompatActivity {
     public Date getPreviousDate(Date date){
         Date previousDate = null;
         if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date); //Setting the today date
-            c.add(Calendar.DATE, -1); // Decreasing 1 day
-            previousDate = c.getTime();
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, -1); // Decreasing 1 day
+            previousDate = cal.getTime();
         }
         return previousDate;
     }
@@ -116,10 +155,10 @@ public class TaskView extends AppCompatActivity {
     public Date getNextDate(Date date){
         Date nextDate = null;
         if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date); // Setting the today date
-            c.add(Calendar.DATE, 1); // Increasing 1 day
-            nextDate = c.getTime();
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 1); // Increasing 1 day
+            nextDate = cal.getTime();
         }
         return nextDate;
     }
@@ -135,15 +174,17 @@ public class TaskView extends AppCompatActivity {
             finish();
         }
         else {
-
-            c = Calendar.getInstance().getTime();
             todayDate = df.format(c);
 
             prevButton = (Button)findViewById(R.id.button_prev);
             nextButton = (Button)findViewById(R.id.button_next);
 
             dateSelected = (TextView)findViewById(R.id.date_main);
+            Calendar cal = Calendar.getInstance();
+            if(c.toString().equals(cal.getTime().toString()))
             dateSelected.setText("Today");
+            else
+                dateSelected.setText(todayDate);
             getAllTask(todayDate);
 
             prevButton.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +192,7 @@ public class TaskView extends AppCompatActivity {
                 public void onClick(View v) {
                     c = getPreviousDate(c);
                     formattedDate = df.format(c);
-                    if(formattedDate.equals(todayDate)){
+                    if(formattedDate.equals(Calendar.getInstance().getTime())){
                         dateSelected.setText("Today");
                     }
                     else {
@@ -166,7 +207,7 @@ public class TaskView extends AppCompatActivity {
                 public void onClick(View v) {
                     c = getNextDate(c);
                     formattedDate = df.format(c);
-                    if(formattedDate.equals(todayDate)){
+                    if(formattedDate.equals(Calendar.getInstance().getTime())){
                         dateSelected.setText("Today");
                     }
                     else {
