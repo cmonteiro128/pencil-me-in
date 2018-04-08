@@ -3,6 +3,7 @@ package mobileapp.wit.edu.pencilmein;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
+import android.support.v4.app.NotificationCompat;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -153,10 +154,11 @@ public class AddTask extends AppCompatActivity{
     }
 
     private Notification getNotification(String content) {
-        Notification.Builder builder = new Notification.Builder(this);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "mainChannel");
         builder.setContentTitle("PencilMeIn: Task Reminder");
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.pencil_me_in_logo);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         return builder.build();
     }
 
