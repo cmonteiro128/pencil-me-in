@@ -1,9 +1,14 @@
 package mobileapp.wit.edu.pencilmein;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -121,6 +126,9 @@ public class AddTask extends AppCompatActivity{
 
                 Log.d("This is the task des", t.description);
 
+                //Set the notification
+                scheduleNotification(getNotification(t.description), 3000);
+
                 Intent intent = new Intent(v.getContext(), TaskView.class);
                 intent.putExtra("Date", currentDate);
                 startActivity(intent);
@@ -129,6 +137,27 @@ public class AddTask extends AppCompatActivity{
         });
 
 
+    }
+
+    private void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Log.v("This has run:", "scheudleNotification");
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("PencilMeIn: Task Reminder");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.pencil_me_in_logo);
+        return builder.build();
     }
 
     /*
