@@ -5,14 +5,16 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
 
     <TextView
         android:id="@+id/displaytime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="26sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"/>
@@ -26,17 +28,17 @@
             android:id="@+id/class_name"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:paddingRight="15dp"
+            android:paddingEnd="15dp"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:paddingLeft="10dp"/>
+            android:paddingStart="10dp"/>
 
         <TextView
             android:id="@+id/task_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -46,8 +48,8 @@
         android:id="@+id/mark_completion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-25dip"
-        android:layout_marginTop="-10dip"
+        android:layout_marginStart="-25dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="" />
 

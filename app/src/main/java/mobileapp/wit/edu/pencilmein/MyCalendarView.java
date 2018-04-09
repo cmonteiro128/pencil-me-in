@@ -42,7 +42,7 @@ public class MyCalendarView extends AppCompatActivity {
                 int day = Integer.valueOf(s.substring(3, 5));
                 int year = Integer.valueOf(s.substring(6));
                 cal.set(year, month, day);
-                EventDay e = new EventDay(cal, R.drawable.ic_event);
+                EventDay e = new EventDay(cal, R.drawable.circle_event);
                 events.add(e);
             }
         }
