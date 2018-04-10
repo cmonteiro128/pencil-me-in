@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,9 +77,6 @@ public class AddTask extends AppCompatActivity{
         openTimePickerDialog();
         addListenerInButton();
 
-
-
-
     }
 
     @Override
@@ -121,14 +119,17 @@ public class AddTask extends AppCompatActivity{
                 d.saveTask(t);
 
                 Toast.makeText(AddTask.this,
-                        "OnClickListener : " +
-                                "\nSpinner : "+ String.valueOf(t.description),
+                        "Added task: " + String.valueOf(t.description),
                         Toast.LENGTH_SHORT).show();
 
                 Log.d("This is the task des", t.description);
 
                 //Set the notification
-                scheduleNotification(getNotification(t.description), 3000);
+                try {
+                    scheduleNotification(getNotification(t.description), t.dueDate, t.dueTime, 3000);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 Intent intent = new Intent(v.getContext(), TaskView.class);
                 intent.putExtra("Date", currentDate);
@@ -140,17 +141,30 @@ public class AddTask extends AppCompatActivity{
 
     }
 
-    private void scheduleNotification(Notification notification, int delay) {
+    private void scheduleNotification(Notification notification, String dueDate, String dueTime, int delay) throws ParseException {
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        Log.v("duedate", dueDate);
+        Log.v("dueTime", dueTime);
+        String totalDueDate = dueDate + " " + dueTime;
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
+        Date dueDateFormatted = formatter.parse(totalDueDate);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dueDateFormatted);
+
+        long timeDifference =  cal.getTime().getTime() - Calendar.getInstance().getTime().getTime();
+        Log.v("currentTime", Calendar.getInstance().getTime().toString());
+        long newTime = timeDifference + SystemClock.elapsedRealtime();
+        Log.v("timediff", Long.toString(timeDifference));
+
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Log.v("This has run:", "scheudleNotification");
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, timeDifference, pendingIntent);
     }
 
     private Notification getNotification(String content) {
