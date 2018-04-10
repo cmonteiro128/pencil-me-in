@@ -60,7 +60,7 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View v) {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
-                passwordEditText.setText("");
+                // passwordEditText.setText("");
 
                 if (username != null && password != null) {
                     new NetworkCall(username, password, url);
