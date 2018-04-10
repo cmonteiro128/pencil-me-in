@@ -68,6 +68,7 @@ public class LoginScreen extends AppCompatActivity {
 
                 StorageHandler storage = new StorageHandler();
                 List<StorageHandler.ClassListData> classes= storage.retrieveClassListObject();
+
                 if(classes == null) {
                     passwordEditText.setError("PencilMeIn could not find data for this user. Please check your credentials and try again.");
                 }

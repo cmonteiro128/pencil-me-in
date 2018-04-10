@@ -35,13 +35,13 @@ public class MyCalendarView extends AppCompatActivity {
         List<EventDay> events = new ArrayList<>();
         TaskHandler t = new TaskHandler();
         List<String> taskDates = t.getAllTaskDates();
-        Calendar cal = new GregorianCalendar();
         int month, day, year;
         for(String s: taskDates){
             if(s.length() == 10){
                 month = Integer.valueOf(s.substring(0, 2)) - 1;
                 day = Integer.valueOf(s.substring(3, 5));
                 year = Integer.valueOf(s.substring(6));
+                Calendar cal = new GregorianCalendar();
                 cal.set(year, month, day);
                 EventDay e = new EventDay(cal, R.drawable.circle_event);
                 events.add(e);
